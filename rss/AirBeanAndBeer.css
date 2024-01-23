@@ -1,0 +1,313 @@
+/*  ----------------------------------- */
+/*  CSS file for AirBeanAndBeer project */
+/*  ----------------------------------- */
+
+/*  Credits: */
+/*  -------- */
+/* - Authors: William Chalencon */
+/* - Created: 2023-12-02 */
+
+
+/* General structure */
+/* ----------------- */
+
+html{
+    -ms-text-size-adjust:100%;
+    -webkit-text-size-adjust:100%;
+    font-size:100%;
+    height:100%;
+}
+
+body{
+    background:#fff;
+    color:#0c0c0c;
+    font-family:'Futura', serif;
+    font-weight:normal;
+    font-size: 12pt;
+    margin:0;
+    min-height:100%;
+    overflow-x:hidden;
+    text-align: justify;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+h1 {
+    font-size: 300%; 
+    font-family:'Futura', serif;
+    color: #2f4248ff; 
+    text-align: center;
+    font-weight:bold;
+    font-style: italic;
+    padding: 10px;
+}
+
+h2 {
+    font-size: 150%; 
+    color: red; 
+    padding-left: 15px;
+}
+
+
+img {
+    display: block;
+    width: 100%;
+}
+
+footer{
+    display: flex;
+    height: 60px;
+    background:#31718cff;
+    font-family:'Futura', serif;
+    color: #2f4248ff; 
+    font-weight:bold;
+    font-size:100%; 
+    justify-content: center;
+}
+
+.marg{
+    margin-right: 10px;
+    margin-top: 20px;
+}
+
+/* Search */
+/* ------ */
+
+select {
+    font-size: 20px;
+    font-family: 'Futura', serif;
+    box-sizing: border-box;
+    border: 0.1em solid #4399b2ff;
+    border-radius: 0.5em; 
+    box-shadow: 0 0.1em 0.2em #2f4248ff;
+}
+
+select .option {
+    padding: 0.2em 0.3em;
+}
+
+table { /*table general*/
+    font-size: 16px;
+    font-family: 'Futura', serif;
+    margin: auto;
+    word-wrap: break-word;
+    table-layout: fixed;
+}
+
+.tabsearch { /*table search*/
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 30%;
+    max-width: 700px;
+    border: none;
+    border-spacing: 0em;
+}
+
+th { /*th general*/
+    text-align: center;
+    font-size: 21px;
+    font-family: 'Futura', serif;
+    background: #4399b2ff;
+    padding: 5px;
+}
+
+.search { /*th search*/
+    color: #fff;
+    text-align: center;
+    font-size: 26px;
+    font-family: 'Futura', serif;
+    background: radial-gradient( 90% 100% at 80% 0%, #4399b2ff 0%, #31718cff 100% );
+    padding: 0px;
+}
+
+tr { /*tr general*/
+    background: rgb(231, 235, 236);
+
+}
+
+.trheader { /*tr search*/
+    background: radial-gradient( 90% 100% at 80% 0%, #4399b2ff 0%, #31718cff 100% );
+}
+
+td { /*td general*/
+    font-size: 20px;
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid rgb(176, 176, 176);
+}
+
+.headtab { /*td search*/
+    font-weight:bold;
+    padding: 10px;
+    font-size: 20px;
+    text-align: left;
+    border: none;
+}
+
+.tdsearch{ /*td search*/
+    font-size: 20px;
+    padding: 0px;
+    text-align: left;
+    border: none;
+}
+
+input {
+    font-size: 20px;
+    font-family: 'Futura', serif;
+}
+
+li {
+    list-style-type: none;
+    padding-bottom: 5px;
+}
+
+ul {
+    padding-inline-start: 0px;
+    padding-bottom: 5px;
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+#biens{
+    overflow: auto;
+}
+
+#tbbiens{
+    border: 5px solid #4399b2ff;
+    border-spacing: 0em;
+}
+
+#avis{
+    text-align: center;
+}
+#tbavis{
+    border-spacing: 0px 5px;
+    width: 700px; 
+    height: 40%;
+    margin: auto;
+}
+
+
+/* Button Search */
+/* ------------- */
+.submitBut {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+
+#submitButton:hover {
+    box-shadow: 0px 4px 8px rgb(45 35 66 / 40%), 0px 7px 13px -3px rgb(45 35 66 / 30%), inset 0px -3px 0px #2f4248ff;
+}
+
+#submitButton:active {
+    box-shadow: inset 0px 3px 7px #2f4248ff;
+}
+
+#submitButton {
+    display: inline-block;
+    outline: 0;
+    border: 0;
+    cursor: pointer;
+    will-change: box-shadow,transform;
+    background: radial-gradient( 90% 100% at 80% 0%, #4399b2ff 0%, #31718cff 100% );
+    padding: 0 32px;
+    border-radius: 4px;
+    color: #fff;
+    height: 48px;
+    font-size: 18px;
+}
+
+/* Button review and reservation */
+/* ----------------------------- */
+
+button{
+    background: radial-gradient( 90% 100% at 80% 0%, #4399b2ff 0%, #31718cff 100% );
+    display: inline-block;
+    color: #fff;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 12pt;
+    margin: 10px;
+}
+
+button:active {
+    box-shadow: inset 0px 3px 7px #2f4248ff;
+}
+
+button:hover {
+    box-shadow: 0px 4px 8px rgb(45 35 66 / 40%), 0px 7px 13px -3px rgb(45 35 66 / 30%), inset 0px -3px 0px #2f4248ff;
+}
+.hidden {
+    display: none;
+}
+
+/* pop-up avis form*/
+
+#avisForm {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #fefefe;
+    border: 1px solid #888;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    width: 60%; 
+    max-width: 600px; 
+    height: auto; 
+    max-height: 80%; 
+    overflow-y: auto;
+}
+
+#avisForm label {
+    font-size: 18px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+#avisForm select,
+#avisForm textarea {
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#submitAvis {
+    background: radial-gradient(90% 100% at 80% 0%, #4399b2ff 0%, #31718cff 100%);
+    display: inline-block;
+    color: #fff;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 10px 20px;
+    border: none;
+}
+
+#submitAvis:hover {
+    box-shadow: 0px 4px 8px rgba(45, 35, 66, 0.4), 0px 7px 13px -3px rgba(45, 35, 66, 0.3), inset 0px -3px 0px #2f4248ff;
+}
+
+#submitAvis:active {
+    box-shadow: inset 0px 3px 7px #2f4248ff;
+}
+
+
+.closeButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #888;
+}
+
+.closeButton:hover {
+    color: #000;
+}

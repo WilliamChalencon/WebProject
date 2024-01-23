@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>AirBeanAndBeer</title>
+        <link rel="stylesheet" href="AirBeanAndBeer.css"><!-- link to the css file-->
+    </head>
+    <header>
+        <!--link to the banner-->
+        <img src="headersite.png" alt="headersite">
+    </header>
+
+    <body>
+        <h1>Trouvez votre prochain hébergement sur Air Bean And Beer </h1>
+        <!--search form from rental in a table so it is prettier
+        all parameters are sent to the script-->
+        <form id="Recherche" >
+            <table class="tabsearch">
+                <thead>
+                    <tr class="trheader">
+                        <th class ="search" colspan="5">Votre recherche</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr >
+                        <td class="headtab">Ville :</td>
+                        <td class="tdsearch"><input type="Text" name="commune" id="communeInput" placeholder="Commune"></td>
+                    </tr>
+                    <tr >
+                        <td class="headtab">Nombres de couchage :</td>
+                        <td class="tdsearch">
+                            <select name="couchages" id="couchageInput">
+                                <option value="">Tous</option>
+                                <option value="=1">1</option>
+                                <option value="=2">2</option>
+                                <option value="=3">3</option>
+                                <option value="=4">4</option>
+                                <option value=">4">5 et plus</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr >
+                        <td class="headtab">Nombres de chambre :</td>
+                        <td class="tdsearch">
+                            <select name="chambres" id="chambreInput">
+                                <option value="">Tous</option>
+                                <option value="=1">1</option>
+                                <option value="=2">2</option>
+                                <option value=">2">3 et plus</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr >
+                        <td class="headtab">Distance du centre-ville (m):</td>
+                        <td class="tdsearch">
+                            <ul>
+                                <li> <input type="number" name="distance" id="distanceInput" placeholder="Distance en (m)"/></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr >
+                        <td class="headtab">Prix :</td>
+                        <td class="tdsearch">
+                            <ul>
+                                <li> <input type="number" name="prixMin" id="prixMinInput" placeholder="Prix Min"/> €</li>
+                                <li> <input type="number" name="prixMax" id="prixMaxInput" placeholder="Prix Max"/> €</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr >
+                        <td class="headtab">Date de séjour (requis) :</td>
+                        <td class="tdsearch">
+                            <ul>
+                                <li>Date de début :  <input type="date" name="dateDebut" id="dateDebutInput"/></li>
+                                <li>Date de fin :  <input type="date" name="dateFin" id="dateFinInput" /></li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="submitBut">
+                <!--submit all parameters for this button-->
+                <input type="submit" id="submitButton" value="Rechercher" />
+            </div><br><br>
+        </form>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {//function used to interact with object/button
+                //create all variables and button from the html
+                const communeInput = document.getElementById('communeInput');
+                const couchageInput = document.getElementById('couchageInput');
+                const chambreInput = document.getElementById('chambreInput');
+                const distanceInput = document.getElementById('distanceInput');
+                const prixMinInput = document.getElementById('prixMinInput');
+                const prixMaxInput = document.getElementById('prixMaxInput');
+                const dateDebutInput = document.getElementById('dateDebutInput');
+                const dateFinInput = document.getElementById('dateFinInput');
+                const submitButton = document.getElementById('submitButton');
+                const ratingInput = document.getElementById('rating');
+                const commentaireInput = document.getElementById('commentaire');
+                const submitAvis = document.getElementById('submitAvis');
+                let idBien;//create a variable used for storing the rent name
+                const mail ='Utilisateur@mail.fr';//the mail is hardcoded as the website doesn't have a login incorporated
+
+                submitButton.addEventListener('click', function (e) {//search button sending the request to the server
+                    e.preventDefault();//prevents the default form submission behavior (refresh)
+
+                    //verify if the date are conform, required for the rest of the script
+                    const dateDebutCompare = new Date(dateDebutInput.value);
+                    const dateFinCompare = new Date(dateFinInput.value);
+                    if (dateDebutInput.value === '' || dateFinInput.value === '' || dateDebutCompare>dateFinCompare) {
+                        alert("Les dates de séjours n'ont pas été complétées ou sont incorrect!");
+                        return;
+                    }
+                    
+                    //parameters used to make the request
+                    const commune = communeInput.value;
+                    const couchage = couchageInput.value;
+                    const chambre = chambreInput.value;
+                    const distance = distanceInput.value;
+                    const prixMin = prixMinInput.value;
+                    const prixMax = prixMaxInput.value;
+                    const dateDebut = dateDebutInput.value;
+                    const dateFin = dateFinInput.value;
+                    
+                    //fetch the script to make the request to the databse and pass the parameters through the URL
+                    fetch(`/airbeanandbeer?commune=${commune}&couchage=${couchage}&chambre=${chambre}&distance=${distance}&prixMin=${prixMin}&prixMax=${prixMax}&dateDebut=${dateDebut}&dateFin=${dateFin}`)
+                        .then(response => response.json()) //parse the response as JSON
+                        .then(data => { //process the data
+                            const biens = document.getElementById('biens');//create a variable "section of the web page "
+                            biens.innerHTML = ''; // Clear the existing section
+                            let dataArray = [];//create an Array to store and sort the results
+                            data.forEach(item => { //store item as object in the array
+                                    dataArray.push({
+                                        'Nom': item.idBien,
+                                        'Mail': item.mail,
+                                        'Commune': item.commune,
+                                        'Adresse': item.rue,
+                                        'Code postal': item.cp,
+                                        'Nombre de Couchage': item.nbCouchages,
+                                        'Nombre de Chambre': item.nbChambres,
+                                        'Distance du centre-ville': item.distance,
+                                        'Prix (€)': item.prix,
+                                        'Note (/5)': item.avis
+                                    });
+                            });
+
+                            if (dataArray.length) {//if the request pull a result 
+                                let table=document.createElement('table'); //create a table to put the results
+                                table.id="tbbiens";//give it an id so it can be manipulated by the css file
+                                let headerRow = table.insertRow(0);//create the header of the table with the key of the first object ( "nom", "Mail"...)
+                                for (let key in dataArray[0]) {
+                                    let th = document.createElement('th');
+                                    th.textContent = key;
+                                    headerRow.appendChild(th);
+                                }
+
+                                //create 2 headers to put buttons in one to see the review and the other to rent 
+                                let th_avis = document.createElement('th');
+                                th_avis.textContent = "Avis";
+                                headerRow.appendChild(th_avis);
+
+                                let th = document.createElement('th');
+                                th.textContent = "Reservation";
+                                headerRow.appendChild(th);
+                                
+                                //put the the data in table
+                                for (let i = 0; i < dataArray.length; i++) {// go through all the object(rent) from the Array
+                                    let dataObject = dataArray[i];
+                                    let row = table.insertRow(i + 1);
+
+                                    for (let key in dataObject) { // for each of them print in the table the data from each parametter of the rent
+                                        let cell = row.insertCell();
+                                        cell.textContent = dataObject[key];
+                                    }
+
+                                    // create a button allowing to see the reviews
+                                    const avisButton = document.createElement('button');
+                                    avisButton.textContent = 'Avis';
+                                    avisButton.id=dataObject['Nom'];// define the id button by the rent name
+                                    
+                                    //function of the button, fetch all the reviews
+
+                                    avisButton.addEventListener('click', function () {
+                                        idBien = avisButton.id;// change the idBien variable
+                                        if (!avisForm.classList.contains('hidden')) { // hide the form if it's not hidden already
+                                            avisForm.classList.add('hidden');
+                                        }
+                                        fetch('/avis',{ // make the request to pull the reviews
+                                            
+                                            method: 'POST', // POST request
+                                            headers: {
+                                                'Content-Type': 'application/json', // specify that the request is in JSON
+                                            },
+                                            body: JSON.stringify({ //converts the js object into json to send as request
+                                                'idBien': idBien
+                                            })
+                                        })
+                                        .then(response => response.json()) // specify the repsonse in json
+                                        .then(data => { //recover the data
+                                            let dataArray_avis=[];// create an Array to store the data object
+                                            const avis = document.getElementById('avis');
+                                            avis.innerHTML='';
+                                            data.forEach(item=>{ //store each object in a Array
+                                                dataArray_avis.push({
+                                                    'Rating': item.note,
+                                                    'Commentaire': item.commentaire,
+                                                    'Utilisateur': item.utilisateur
+                                                });
+                                            });
+
+                                            let table_avis=document.createElement('table'); //create a new table to display the reviews
+                                            table_avis.id="tbavis"; // give an id to the table for css matter
+                                            let headerRow_avis = table_avis.insertRow(0);//create the header of the reviews table
+                                            for (let key in dataArray_avis[0]) { // give header details to the table
+                                                let th_avis = document.createElement('th');
+                                                th_avis.textContent = key;
+                                                headerRow_avis.appendChild(th_avis);
+                                            }
+
+                                        
+                                            for (let i = 0; i < dataArray_avis.length; i++) {// print all the data in the table first iterating object
+                                                let dataObject = dataArray_avis[i];
+                                                let row_avis = table_avis.insertRow(i+1);
+
+                                                for (let key in dataObject) {//then by key
+                                                    let cell_avis = row_avis.insertCell();
+                                                    cell_avis.textContent = dataObject[key];
+                                                }
+                                            }
+                                            const nvAvisButton = document.createElement('button'); //create a button to show a review form
+                                            nvAvisButton.textContent = 'Laisser un avis';
+                                            nvAvisButton.id=idBien;
+                                            nvAvisButton.addEventListener('click', function () { // display the form
+                                                avisForm.classList.toggle('hidden');
+                                            });
+                                            avis.appendChild(table_avis); //add the review table to the html 
+                                            avis.appendChild(nvAvisButton); // add the button below
+                                        })
+                                        .catch(error => {
+                                            // Handle errors, e.g., display an error message
+                                            console.error('Error avis', error);
+                                        }); 
+                                    });
+
+                                    let cell_avis = row.insertCell();
+                                    cell_avis.appendChild(avisButton);
+
+                                    // Add a button in the new column for each bien, this one is for renting
+                                    const reservationButton = document.createElement('button');
+                                    reservationButton.textContent = 'Réserver';
+                                    reservationButton.id=dataObject['Nom'];//give each button an id of the rent name
+                                    reservationButton.addEventListener('click', function () {
+                                        const idBien = reservationButton.id;
+                                        //the mail is hardcoded as the website doesn't have a login incorporated
+                                        // Make a fetch request to the server endpoint
+                                        fetch('/reservation', {
+                                            
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                            },
+                                            body: JSON.stringify({
+                                                'idBien': idBien, 
+                                                'dateDebut' : dateDebut, 
+                                                'dateFin' : dateFin,
+                                                'mail' : mail
+                                            }),
+                                        })
+                                        .then(response => {
+                                            if (!response.ok) {
+                                                throw new Error('Failed to insert location');
+                                            }
+                                            // display a success message to the user
+                                            alert("Reservation faites, merci!");
+                                        })
+                                        .catch(error => {
+                                            // display the error if needed
+                                            console.error('Error reservation:', error);
+                                        }); 
+                                    });
+
+
+
+                                    let cell = row.insertCell();//add the reservation button to the rent table
+                                    cell.appendChild(reservationButton);
+
+                                } 
+                                //add the table to the html file      
+                                biens.appendChild(table);
+                            } else { // display a message if no result
+                                alert("Pas de resultat pour cette recherche :(")
+                            }
+                        })//display error
+                        .catch(error => console.error('Error fetching data', error));
+                });
+
+                //send a review form button
+                submitAvis.addEventListener('click', function (e) {
+                    e.preventDefault();//since it's a form, need to prevent default behavior
+                    
+                    //recover the form parameter
+                    const rating = ratingInput.value;
+                    const commentaire = commentaireInput.value;
+
+                    //when sent hide the form
+                    avisForm.classList.toggle('hidden');
+
+                    //make a POST request sending the review parameter
+                    fetch(`/newAvis`, {
+
+                        method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                'idBien': idBien, 
+                                'rating' : rating, 
+                                'commentaire' : commentaire,
+                                'mail' : mail
+                            }),
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to insert avis');
+                        }
+                        // Handle success, e.g., display a message to the user
+                        alert("Avis envoyé, merci!");
+                    })
+                    .catch(error => {
+                        // Handle errors, e.g., display an error message
+                        console.error('Error avis:', error);
+                    }); 
+                });
+
+            });
+        </script>
+
+        <ul id="biens"></ul><br><br>
+        <ul id="avis"></ul>
+
+        <!-- form to send a review -->
+        <form class="hidden" id="avisForm">
+            <!-- close button toggle the hide -->
+            <span class="closeButton" onclick="document.getElementById('avisForm').classList.add('hidden')">&times;</span>
+            <label for="name">Rating:</label><br>
+            <select name="rating" id="rating" required>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <br>
+            <label for="name">Commentaires:</label><br>
+            <!-- text box-->
+            <textarea id="commentaire" name="commentaire"></textarea><br>
+
+            <input type="submit" id="submitAvis" value="Envoyer mon avis">
+        </form>
+        
+    </body><br><br>
+
+    <footer>
+        <p class="marg">© 2023 William C.</p>
+    </footer>
+</html>
